@@ -1,0 +1,47 @@
+#define pt A0
+void setup() {
+  for(int i=3;i<=8;i++){
+    pinMode(i,OUTPUT);
+  }
+
+}
+
+void loop() {
+  int deger=analogRead(pt);
+ //int deger2=map(deger,0,1023,0,255);
+  if(deger>150){
+    digitalWrite(3,HIGH);
+  }else{
+    digitalWrite(3,LOW);
+  }
+  if(deger>300){
+    digitalWrite(4,HIGH);
+  }else{
+    digitalWrite(4,LOW);
+  }
+  if(deger>500){
+    digitalWrite(5,HIGH);
+  }
+  else{
+    digitalWrite(5,LOW);
+  }
+  if(deger>650){
+    digitalWrite(6,HIGH);
+  }
+  else{
+    digitalWrite(6,LOW);
+  }
+  if(deger>900){
+    digitalWrite(7,HIGH);
+  }
+  else{
+    digitalWrite(7,LOW);
+  }
+  if(deger>1000){
+    digitalWrite(8,HIGH);
+    delay(100);
+  }else{
+    digitalWrite(8,LOW);
+  }
+  delay(20);
+}
