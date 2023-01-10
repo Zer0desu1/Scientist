@@ -1,0 +1,77 @@
+#define x A0
+int konum =4;
+void a1(){
+  digitalWrite(4,HIGH);
+  digitalWrite(5,LOW);
+  digitalWrite(6,LOW);
+  digitalWrite(7,LOW);
+  //delay(1);
+}
+void a2(){
+  digitalWrite(4,LOW);
+  digitalWrite(5,HIGH);
+  digitalWrite(6,LOW);
+  digitalWrite(7,LOW);
+  //delay(1);
+}
+void a3(){
+  digitalWrite(4,LOW);
+  digitalWrite(5,LOW);
+  digitalWrite(6,HIGH);
+  digitalWrite(7,LOW);
+  //delay(1);
+}
+void a4(){
+  digitalWrite(4,LOW);
+  digitalWrite(5,LOW);
+  digitalWrite(6,LOW);
+  digitalWrite(7,HIGH);
+  //delay(1);
+}
+void setup() {
+  pinMode(4,OUTPUT);
+    pinMode(5,OUTPUT);
+
+  pinMode(6,OUTPUT);
+
+  pinMode(7,OUTPUT);
+Serial.begin(9600);
+}
+
+void loop() {
+
+int d=analogRead(x);Serial.println(d);
+if(d>750){sag(1);}
+if(d<350){sol(1);}
+/*sag(200);
+  sol(50);
+ */
+}
+void sag(int n){
+  for(int i=0;i<n;i++){
+    digitalWrite(konum,HIGH);
+    delay(7);
+    digitalWrite(konum,LOW);
+    konumt();
+  }
+}
+void sol(int n){
+  for(int i=0;i<n;i++){
+    digitalWrite(konum,HIGH);
+    delay(7);
+    digitalWrite(konum,LOW);
+    konuma();
+  }
+}
+void konumt(){
+  konum++;
+  if(konum==8)
+    konum=4;
+}
+void konuma(){
+  konum--;
+  if(konum==8)
+    konum=4;
+    if(konum==3)
+    konum=7;
+}
