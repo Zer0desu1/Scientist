@@ -1,0 +1,21 @@
+#include<Servo.h>
+#define x A0
+#define y A1
+Servo s1,s2;
+void setup() {
+  s1.attach(7);
+  s2.attach(8);
+  Serial.begin(9600);
+}
+
+void loop() {
+ int X=analogRead(x);
+ int Y=analogRead(y);
+
+
+ X=map(X,0,1023,0,179);s1.write(X);
+ Y=map(Y,0,1023,0,179); Serial.println(X); Serial.println(Y);
+   
+   s2.write(Y);
+   delay(10);
+}
