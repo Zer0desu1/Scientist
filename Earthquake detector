@@ -1,9 +1,14 @@
 #include <Arduino.h>
 #include <TinyMPU6050.h>
-float angx, angy, angz, offx, offy, offz;
 MPU6050 mpu (Wire);
-void setup() {
+float calx,caly,calz,angx,angy,angz;
 
+
+void setup() {
+  pinMode(8,OUTPUT);
+  pinMode(4, OUTPUT);
+  digitalWrite(8, LOW);
+  digitalWrite(4, LOW);
   // Initialization
   mpu.Initialize();
 
@@ -11,68 +16,70 @@ void setup() {
   Serial.begin(9600);
   Serial.println("=====================================");
   Serial.println("Starting calibration...");
-  
-  
-  pinMode(4,OUTPUT);
-  pinMode(8, OUTPUT);
-  digitalWrite(8, LOW);
-  digitalWrite(4, LOW);
-mpu.Calibrate();
-  delay(1000);
+  //mpu.Calibrate();
   for(int i=0; i<200;i++){
    mpu.Execute();
-  offx = mpu.GetAngX();
-  offy = mpu.GetAngY();
-  offz = mpu.GetAngZ();
+  calx += mpu.GetAngX();
+  caly += mpu.GetAngY();
+  calz += mpu.GetAngZ();
    Serial.print("offset_x = ");
-  Serial.print(offx);
+  Serial.print(calx);
   Serial.print("  /  offsetY = ");
-  Serial.print(offy);
+  Serial.print(calx);
   Serial.print("  /  offsetZ = ");
-  Serial.println(offz);
+  Serial.println(calx);
   }
-  Serial.print("--------------------------------------------");
-  Serial.print("offset_x = ");
-  Serial.print(offx);
+  calx/=200;caly/=200;calz/=200;
+   Serial.print("offset_x = ");
+  Serial.print(calx);
   Serial.print("  /  offsetY = ");
-  Serial.print(offy);
+  Serial.print(caly);
   Serial.print("  /  offsetZ = ");
-  Serial.println(offz);
+  Serial.println(calz);
   Serial.println("Calibration complete!");
 }
 
 void loop() {
-
- for(int i=0; i<5;i++){
+ Serial.print("--------------------------------------------");
+  
+for(int i=0; i<5;i++){
   mpu.Execute();
   angx = mpu.GetAngX();
   angy = mpu.GetAngY();
   angz = mpu.GetAngZ();
+  Serial.print("offset_x = ");
+  Serial.print(angx);
+  Serial.print("  /  offsetY = ");
+  Serial.print(angy);
+  Serial.print("  /  offsetZ = ");
+  Serial.println(angz);
  }
-float dx=angx - offx,dy=angy - offy,dz=angz - offz;
-  Serial.print("ddddddddddxx = ");
-  Serial.print(dx);
-  Serial.print("  /  ddddddddddyyy = ");
-  Serial.print(dy);
-  Serial.print("  /  ddddddzzzzzzz = ");
-  Serial.println(dz);
-  
+ 
+  float difx=angx-calx;
+  float dify=angy-caly;
+  float difz=angz-calz;
+  Serial.print("ddd = ");
+  Serial.print(difx);
+  Serial.print("  /  dddd = ");
+  Serial.print(dify);
+  Serial.print("  /  ofdddfsetZ = ");
+  Serial.println(difz);
+  if ( 10 < difx || -10 > difx || 10 < dify || -10 > dify || 10 < difz|| -10 > difz){
 
- if ( 1 <dx  || -1 > dx || 1< dy || -1 > dy ||1 < dz || -1 > dz){
-
-  for(int i=0; i<50; i++){
-  digitalWrite(4,HIGH);
-  digitalWrite(8,LOW);
-  delay(50);
-  digitalWrite(4,LOW);
+  for(int i=0; i<20; i++){
   digitalWrite(8,HIGH);
+  digitalWrite(4,LOW);
+  delay(50);
+  digitalWrite(8,LOW);
+  digitalWrite(4,HIGH);
   delay(50);
   }   
-  delay(5000);  
+  delay(1000);  
   mpu.Execute();
-  offx = mpu.GetAngX();
-  offy = mpu.GetAngY();
-  offz = mpu.GetAngZ();
+  calx = mpu.GetAngX();
+  caly = mpu.GetAngY();
+  calz = mpu.GetAngZ();
 
  }  
+
 }
