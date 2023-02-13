@@ -1,0 +1,78 @@
+#include <Arduino.h>
+#include <TinyMPU6050.h>
+float angx, angy, angz, offx, offy, offz;
+MPU6050 mpu (Wire);
+void setup() {
+
+  // Initialization
+  mpu.Initialize();
+
+  // Calibration
+  Serial.begin(9600);
+  Serial.println("=====================================");
+  Serial.println("Starting calibration...");
+  
+  
+  pinMode(4,OUTPUT);
+  pinMode(8, OUTPUT);
+  digitalWrite(8, LOW);
+  digitalWrite(4, LOW);
+mpu.Calibrate();
+  delay(1000);
+  for(int i=0; i<200;i++){
+   mpu.Execute();
+  offx = mpu.GetAngX();
+  offy = mpu.GetAngY();
+  offz = mpu.GetAngZ();
+   Serial.print("offset_x = ");
+  Serial.print(offx);
+  Serial.print("  /  offsetY = ");
+  Serial.print(offy);
+  Serial.print("  /  offsetZ = ");
+  Serial.println(offz);
+  }
+  Serial.print("--------------------------------------------");
+  Serial.print("offset_x = ");
+  Serial.print(offx);
+  Serial.print("  /  offsetY = ");
+  Serial.print(offy);
+  Serial.print("  /  offsetZ = ");
+  Serial.println(offz);
+  Serial.println("Calibration complete!");
+}
+
+void loop() {
+
+ for(int i=0; i<5;i++){
+  mpu.Execute();
+  angx = mpu.GetAngX();
+  angy = mpu.GetAngY();
+  angz = mpu.GetAngZ();
+ }
+float dx=angx - offx,dy=angy - offy,dz=angz - offz;
+  Serial.print("ddddddddddxx = ");
+  Serial.print(dx);
+  Serial.print("  /  ddddddddddyyy = ");
+  Serial.print(dy);
+  Serial.print("  /  ddddddzzzzzzz = ");
+  Serial.println(dz);
+  
+
+ if ( 1 <dx  || -1 > dx || 1< dy || -1 > dy ||1 < dz || -1 > dz){
+
+  for(int i=0; i<50; i++){
+  digitalWrite(4,HIGH);
+  digitalWrite(8,LOW);
+  delay(50);
+  digitalWrite(4,LOW);
+  digitalWrite(8,HIGH);
+  delay(50);
+  }   
+  delay(5000);  
+  mpu.Execute();
+  offx = mpu.GetAngX();
+  offy = mpu.GetAngY();
+  offz = mpu.GetAngZ();
+
+ }  
+}
