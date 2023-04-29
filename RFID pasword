@@ -1,0 +1,30 @@
+#include<MFRC522.h>
+#include<SPI.h>
+#include<Keyboard.h>
+MFRC522 rfid(10,9);
+byte card[4]={18,202,255,30};
+byte card2[4]={217,137,113,20};
+void setup() {
+  Serial.begin(9600);
+  SPI.begin();
+  rfid.PCD_Init();
+  Keyboard.begin();
+}
+void loop() {
+  if(!rfid.PICC_IsNewCardPresent()){return;}
+  if(!rfid.PICC_ReadCardSerial()){return;}
+    Serial.print(rfid.uid.uidByte[0]);Serial.print("-");
+    Serial.print(rfid.uid.uidByte[1]);Serial.print("-");
+    Serial.print(rfid.uid.uidByte[2]);Serial.print("-");
+    Serial.print(rfid.uid.uidByte[3]);Serial.print("-");
+   Serial.println();
+   if(rfid.uid.uidByte[0]==card[0]&&rfid.uid.uidByte[1]==card[1]&&rfid.uid.uidByte[2]==card[2]&&rfid.uid.uidByte[3]==card[3])
+   {Keyboard.press(176);Keyboard.release(176);delay(100);Keyboard.print("2001");Keyboard.press(176);Keyboard.release(176);}
+   if(rfid.uid.uidByte[0]==card2[0]&&rfid.uid.uidByte[1]==card2[1]&&rfid.uid.uidByte[2]==card2[2]&&rfid.uid.uidByte[3]==card2[3])
+   {Keyboard.print("https?&&www/youtube/com&");Keyboard.press(134);Keyboard.press('q');Keyboard.releaseAll();Keyboard.print("vuralb'lgn&featured");Keyboard.print("");Keyboard.press(176);Keyboard.release(176);}
+
+
+   
+    rfid.PICC_HaltA();
+ delay(1400);
+}
