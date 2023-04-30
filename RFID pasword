@@ -19,7 +19,7 @@ void loop() {
     Serial.print(rfid.uid.uidByte[3]);Serial.print("-");
    Serial.println();
    if(rfid.uid.uidByte[0]==card[0]&&rfid.uid.uidByte[1]==card[1]&&rfid.uid.uidByte[2]==card[2]&&rfid.uid.uidByte[3]==card[3])
-   {Keyboard.press(176);Keyboard.release(176);delay(100);Keyboard.print("2001");Keyboard.press(176);Keyboard.release(176);}
+   {Keyboard.press(176);Keyboard.release(176);delay(100);Keyboard.print("YOUR_PASSWORD");Keyboard.press(176);Keyboard.release(176);}
    if(rfid.uid.uidByte[0]==card2[0]&&rfid.uid.uidByte[1]==card2[1]&&rfid.uid.uidByte[2]==card2[2]&&rfid.uid.uidByte[3]==card2[3])
    {Keyboard.print("https?&&www/youtube/com&");Keyboard.press(134);Keyboard.press('q');Keyboard.releaseAll();Keyboard.print("vuralb'lgn&featured");Keyboard.print("");Keyboard.press(176);Keyboard.release(176);}
 
