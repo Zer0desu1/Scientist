@@ -1,0 +1,83 @@
+
+#include "BluetoothSerial.h"
+#include <FastLED.h>
+#if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
+#error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
+#endif
+
+#if !defined(CONFIG_BT_SPP_ENABLED)
+#error Serial Bluetooth not available or not enabled. It is only available for the ESP32 chip.
+#endif
+ 
+#define NUM_LEDS 8 //Led Sayısı
+#define FASTLED_ESP32_SPI_BUS HSPI
+CRGB leds[NUM_LEDS]; //Led Dizisi 
+BluetoothSerial SerialBT;
+
+void setup() {
+  Serial.begin(115200);
+  SerialBT.begin("ESP32test"); 
+  Serial.println("The device started, now you can pair it with bluetooth!");
+  FastLED.addLeds<WS2812B, 25, GRB>(leds, NUM_LEDS); 
+  FastLED.setBrightness(255);
+}
+
+void loop() {
+  if (Serial.available()) {
+    SerialBT.write(Serial.read());
+    
+  }
+  if (SerialBT.available()) {
+    
+    int s=SerialBT.read();
+    delay(20);
+    if(s==1){
+      leds[0].setRGB(255,160,122); 
+      leds[1].setRGB(255,69,0); 
+      leds[2].setRGB(255,73,108);
+      leds[3].setRGB(255,73,108);
+      leds[4].setRGB(255,73,108);
+      leds[5].setRGB(184,134,11);
+      leds[6].setRGB(218,165,32);
+      leds[7].setRGB(250,128,114);
+  FastLED.show();  
+  }
+    if(s==2){ 
+      leds[0].setRGB(100,100,0); 
+      leds[1].setRGB(139,0,0); 
+      leds[2].setRGB(165,42,42);
+      leds[3].setRGB(178,34,34);
+      leds[4].setRGB(220,20,60);
+      leds[5].setRGB(255,0,0);
+      leds[6].setRGB(255,99,71);
+      leds[7].setRGB(255,127,80);
+  FastLED.show();  
+  }
+    if(s==3){ 
+       leds[0].setRGB(25,25,112); 
+      leds[1].setRGB(95,75,139); 
+      leds[2].setRGB(65,105,225);
+      leds[3].setRGB(138,43,226);
+      leds[4].setRGB(95,75,139);
+      leds[5].setRGB(255,0,255);
+      leds[6].setRGB(255,20,147);
+      leds[7].setRGB(95,75,139);
+  FastLED.show();  
+  }
+  if(s==4){ 
+       leds[0].setRGB(0,0,0); 
+      leds[1].setRGB(0,0,0); 
+      leds[2].setRGB(0,0,0);
+      leds[3].setRGB(0,0,0);
+      leds[4].setRGB(0,0,0);
+      leds[5].setRGB(0,0,0);
+      leds[6].setRGB(0,0,0);
+      leds[7].setRGB(0,0,0);
+  FastLED.show();  
+  }
+    
+   
+    Serial.println(s);
+  }
+  delay(20);
+}
