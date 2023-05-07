@@ -1,0 +1,50 @@
+#include<Servo.h>
+Servo s1,s2;
+int l1=0,l2=0,l3=0,l4=0;
+int ldr1=A1,ldr2=A2,ldr3=A3,ldr4=A4;
+int m1=0,m2=0,m3=0;
+int servo1=0,servo2=0;
+void setup() {
+  Serial.begin(9600);
+  s1.attach(9);
+  s2.attach(10);
+  s1.write(0);
+  s2.write(20);
+}
+
+void loop() {
+  l1=analogRead(ldr1)/10;
+  l2=analogRead(ldr2)/10;
+  l3=analogRead(ldr3)/10;
+  l4=analogRead(ldr4)/10;
+
+  m1=max(l1,l2);
+  m2=max(l3,l4);
+  m3=max(m1,m2);
+  if(m3>l1&&m3>l2){
+    if(servo1<65)
+      servo1+=1;
+    s1.write(servo1);
+  }
+  if(m3>l3&&m3>l4){
+    if(servo1>0)
+      servo1-=1;
+    s1.write(servo1);
+  }
+  if(m3>l3&&m3>l2){
+    if(servo2>0)
+      servo2-=1;
+    s2.write(servo2);
+  }if(m3>l1&&m3>l4){
+    if(servo2<170)
+      servo2+=1;
+    s2.write(servo2);
+  }
+
+  Serial.println("----------------");
+  Serial.println(l1);
+  Serial.println(l2);
+  Serial.println(l3);
+  Serial.println(l4);
+  delay(15);
+}
